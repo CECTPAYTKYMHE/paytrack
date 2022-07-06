@@ -1,0 +1,20 @@
+﻿{% load static %}
+    <link href="{% static 'main/css/bootstrap.min.css' %}" rel='stylesheet'>
+    <link href="{% static 'main/icons/bootstrap-icons.css' %}" rel='stylesheet'>
+    <link href="{% static 'main/calendar/lib/main.css' %}" rel='stylesheet' />
+    <script src="{% static 'main/calendar/lib/main.js' %}"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            locales: 'ru',
+            themeSystem: 'bootstrap5',
+            timeZone: 'UTC+3',
+            events: {{events|safe}},
+            editable: true,
+            selectable: true,
+        });
+        calendar.render();
+      });
+    </script>
+    <div id='calendar'></div>
