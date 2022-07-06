@@ -1,4 +1,11 @@
 from django.shortcuts import render
+from .models import *
+from Calendar.serializers import CalendarSerializer
+from rest_framework import viewsets
+
+class CalendarViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Calendar.objects.all()
+    serializer_class = CalendarSerializer
 
 def home(request):
     events = [
