@@ -1,19 +1,8 @@
 from django.shortcuts import render
 
-def index(request):
-    events  = [{
-          'title' : 'Светлана',
-          'start': '2022-07-05',
-        'url': '/index',
-        },
-        {
-          'title' : 'Светлана',
-          'start': '2022-07-10',
-        'url': '/index',
-        }]
+def login(request):
     context = {
-        'title' : 'Главная',
-        'events' : events,
+        'title' : 'Login page',
         }
 
-    return render(request, 'main/index.html', context)
+    return render(request, 'main/login.html', context)

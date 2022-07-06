@@ -1,9 +1,10 @@
 
 from django.contrib import admin
-from django.urls import path
-from .views import index
+from django.urls import path, include
+from .views import login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', index, name = 'index'),
+    path('', login, name = 'login'),
+    path('home/', include(('Calendar.urls', 'calendar'))),
 ]
