@@ -66,25 +66,36 @@
   <body class="text-center">
     
 <main class="form-signin w-100 m-auto">
-  <form action="{% url 'login' %}" method="post">
+  <form action="{% url 'register' %}" method="post">
     {% csrf_token %}
-    <h1 class="h3 mb-3 fw-normal">Авторизация</h1>
+    <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
 
     <div class="form-floating">
         {{ form.username }}
-      <label for="floatingInput">Пользователь</label>
+      <label for="{{ form.username.id_for_label }}">Пользователь</label>
+    </div>
+    <div class="form-floating mb-3">
+      {{ form.email}}
+      <label for="{{ form.email.id_for_label }}">E-mail</label>
+    </div>
+  </div>
+    <div class="form-floating">
+        {{ form.password1 }}
+      <label for="{{ form.password1.id_for_label }}">Пароль</label>
     </div>
     <div class="form-floating">
-        {{ form.password }}
-      <label for="floatingPassword">Пароль</label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+      {{ form.password2 }}
+    <label for="{{ form.password2.id_for_label }}">Повторите пароль</label>
+  </div>
+  <div class="form-floating mb-3">
+    {{ form.telegram_id }}
+  <label for="{{ form.telegram_id.id_for_label }}">ID Telegram</label>
+</div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Регистрация</button>
     <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
   </form>
-  <h6><a href="{% url 'register' %}">Регистрация</a></h6>
+  <h6><a href="{% url 'login' %}">Уже есть аккаунт? Войти</a></h6>
 </main>
 
-
-    
   </body>
 </html>

@@ -3,7 +3,7 @@ from .models import *
 from Calendar.serializers import CalendarSerializer
 from rest_framework import viewsets
 
-class CalendarViewSet(viewsets.ReadOnlyModelViewSet):
+class CalendarViewSet(viewsets.ModelViewSet):
     queryset = Calendar.objects.all()
     serializer_class = CalendarSerializer
 
