@@ -36,14 +36,13 @@ def register(request):
         return HttpResponseRedirect(reverse('login'))
     if request.method == 'POST':
         form = UserRegistrationForm(data=request.POST)
+        if User.objects.filter(username = request.POST['username']).first():
+                messages.warning(request, "Такой пользователь уже существует")
+                return redirect('register')
+        elif User.objects.filter(email = request.POST['email']).first():
+                messages.warning(request, "Пользователь с такой почтой уже существует")
+                return redirect('register')
         if form.is_valid():
-            if User.objects.filter(username = request.POST['username']).first():
-                messages.error(request, "Такой пользователь уже существует")
-                return redirect('register')
-            elif User.objects.filter(email = request.POST['email']).first():
-                messages.error(request, "Пользователь с такой почтой уже существует")
-                return redirect('register')
-            else:
                 form.save()
                 user = User.objects.get(username = request.POST['username'])
                 Profile.objects.create(user = user, telegram_id=request.POST['telegram_id'])

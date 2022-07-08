@@ -64,8 +64,9 @@
     <link href="{% static 'main/css/signin.css' %}" rel="stylesheet">
   </head>
   <body class="text-center">
-    
 <main class="form-signin w-100 m-auto">
+  {% include "main/message.html" %}
+
   <form action="{% url 'register' %}" method="post">
     {% csrf_token %}
     <h1 class="h3 mb-3 fw-normal">Регистрация</h1>

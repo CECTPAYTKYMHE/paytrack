@@ -5,7 +5,8 @@ from django.conf import settings
 class Customer(models.Model):
     """Модель заказчика"""
     name = models.CharField('Заказчик', max_length=64)
-    description = models.TextField('Описание',)
+    description = models.TextField('Описание',blank=True,null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Репетитор')
     
     def __str__(self):
         return self.name

@@ -39,16 +39,5 @@ class UserRegistrationForm(UserCreationForm):
         for field_name, filed in self.fields.items():
             filed.widget.attrs['class'] = 'form-control'
 
-# class UserRegistrationAddonForms(ModelForm):
-#     telegram_id = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Введите id телеграмм'}))
-    
-#     class Meta:
-#         model = Profile
-#         fields = ['telegram_id']
-        
-#     def __init__(self, *args, **kwargs):
-#         super(UserRegistrationAddonForms,self).__init__(*args, **kwargs)
-#         for field_name, filed in self.fields.items():
-#             filed.widget.attrs['class'] = 'form-control'
     
     
