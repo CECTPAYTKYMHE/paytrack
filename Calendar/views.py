@@ -30,7 +30,21 @@ def home(request):
 
 class Addevent(View):
     def post(self,request,*args, **kwargs):
-        print(request.POST)
+        if 'repeat' in request.POST:
+            repeat = True
+        else:
+            repeat = False
+        if 'telegramm' in request.POST:
+            telegrambool = True
+        else:
+            telegrambool = False
+        Calendar.objects.create(title=Customer.objects.get(name = request.POST['title']),
+                                start = request.POST['start'],
+                                end = request.POST['end'],
+                                price = request.POST['price'],
+                                repeat = repeat,
+                                telegrambool = telegrambool,
+                                user = Profile.objects.get(user = request.user))
         return HttpResponseRedirect(reverse('calendar:addevent'))
         
     def get(self,request,*args, **kwargs):

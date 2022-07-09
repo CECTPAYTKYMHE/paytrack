@@ -10,9 +10,6 @@ class AddEventForms(forms.ModelForm):
     price = forms.IntegerField(widget=forms.TextInput(attrs={'placeholder': 'Цена за занятие'}))
     telegrambool = forms.BooleanField()
     
-
-    # captcha = CaptchaField(label='Введите символы')
-    
     class Meta:
         model = Calendar
         fields = ('title','start','end','repeat','price','telegrambool')
