@@ -18,27 +18,29 @@ import json
 class EventsListViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-
-def home(request):
+    
+def eventcontext(request):
     events = []
     profile = Profile.objects.get(user=request.user)
     calendar = Calendar.objects.filter(user = profile)
     for event in calendar:
         events.append(Event.objects.filter(master_event = event))
-    # print(events[0][0].__dict__)
-    # print(events[0][0]['start'])
-    # print(calendar[0]())
     lessons = []
-    for lesson in events[0]:
-        lessons.append(
-            {
-                'title' : lesson.__dict__['title'],
-                'start' : datetime.strftime(lesson.__dict__['start'],'%Y-%m-%d'),
-                'end': datetime.strftime(lesson.__dict__['end'],'%Y-%m-%d'),
-                'url': '/home/event/' + str(lesson.__dict__['id'])
-                
-            }
-        )
+    for event in events:
+        for lesson in event:
+            lessons.append(
+                {
+                    'title' : f"{str(lesson.__dict__['title'])} {str(datetime.strftime(lesson.__dict__['start'],'%H:%M'))}",
+                    'start' : datetime.strftime(lesson.__dict__['start'],'%Y-%m-%d'),
+                    'end': datetime.strftime(lesson.__dict__['end'],'%Y-%m-%d'),
+                    'url': '/home/event/' + str(lesson.__dict__['id'])
+                    
+                }
+            )
+    return lessons
+    
+def home(request):
+    lessons = eventcontext(request)
     context = {
      'title' : 'Home',
      'lessons' : lessons,
@@ -79,19 +81,11 @@ class AddCalendar(View):
 
     def get(self,request,*args, **kwargs):
         form = AddCalendarForms
-        events = [
-            {
-                'title' : 'Костя',
-                'start' : '2022-07-06',
-                'end': '2022-07-07',
-                'url': '/',
-                
-            }
-        ]
+        lessons = eventcontext(request)
         students = Customer.objects.filter(user = request.user)
         context = {
         'title' : 'Home',
-        'events' : events,
+        'lessons' : lessons,
         'students': students,
         'form': form,
             }
