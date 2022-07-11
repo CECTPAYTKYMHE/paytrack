@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.urls import reverse
 
 class Customer(models.Model):
     """Модель заказчика"""
@@ -22,8 +23,8 @@ class Profile(models.Model):
 class Calendar(models.Model):
     """Модель с данными для создания моделей событий"""
     title = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name='Заказчик')
-    start = models.DateTimeField('Дата начала')
-    end = models.DateTimeField('Дата окончания')
+    time_start = models.DateTimeField('Дата начала')
+    time_end = models.DateTimeField('Дата окончания')
     repeat = models.BooleanField('Повторяется ли событие?',default=False)
     price = models.PositiveIntegerField('Цена за услугу')
     telegrambool = models.BooleanField('Оповещать по телеграмм?', default=False)
@@ -34,9 +35,14 @@ class Calendar(models.Model):
     
 class Event(models.Model):
     """Создание ивентов репетиторства на основе модели Calendar"""
-    date_event = models.DateTimeField('Дата события')
+    title = models.CharField('Название', max_length=64)
+    start = models.DateTimeField('Дата начала события')
+    end = models.DateTimeField('Дата окончания события')
     paid = models.BooleanField('Произошла ли оплата?', default=False)
     master_event = models.ForeignKey(Calendar,on_delete=models.CASCADE, verbose_name='Событие')
     
     def __str__(self):
-        return f'{str(self.master_event)} {str(self.date_event)}'
+        return f'{str(self.master_event)} {str(self.start)}'
+    
+    def get_absolute_url(self):
+        return reverse('calendar:event', kwargs={'pk': self.pk})
