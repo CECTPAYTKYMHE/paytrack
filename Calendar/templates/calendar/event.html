@@ -1,23 +1,16 @@
-﻿<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-    </head>
-    <body>
-        
-        {{event}}
-        
-        
-        
-        <script src="" async defer></script>
-    </body>
-</html>
+﻿{% extends 'main/base.html' %}
+{% block content %}
+<form action="{% url 'calendar:event' pk=event.id  %}" method="post">
+    {% csrf_token %}
+    <div class="mb-3 row my-4">
+        <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm" aria-label=".form-control-sm example" value="{{event.title}} {{event.start}}" readonly>
+
+   
+        <div class="form-check form-switch my-4">
+            {{form.paid}}
+            <label class="form-check-label" for="flexSwitchCheckDefault">Оплачено</label>
+          </div>
+    </div>
+    <button class="w-30 btn btn-lg btn-primary" type="submit">Сохранить</button>
+</form>
+{% endblock content %}

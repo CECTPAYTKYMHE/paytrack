@@ -40,6 +40,7 @@ class Event(models.Model):
     end = models.DateTimeField('Дата окончания события')
     paid = models.BooleanField('Произошла ли оплата?', default=False)
     master_event = models.ForeignKey(Calendar,on_delete=models.CASCADE, verbose_name='Событие')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Репетитор')
     
     def __str__(self):
         return f'{str(self.master_event)} {str(self.start)}'

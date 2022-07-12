@@ -1,6 +1,7 @@
 ﻿from django import forms
 from .models import *
 
+
 class AddCalendarForms(forms.ModelForm):
     """Форма для создания события календаря"""
     title = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Введите имя ученика или выберите из выпадающего списка','list':'datalistOptions'}))
@@ -18,3 +19,19 @@ class AddCalendarForms(forms.ModelForm):
         super(AddCalendarForms,self).__init__(*args, **kwargs)
         for field_name, filed in self.fields.items():
             filed.widget.attrs['class'] = 'form-control'
+            # <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {% if event.paid %}checked{% endif %}>
+
+class PaidEventForms(forms.ModelForm):
+    
+    class Meta:
+        model = Event
+        fields = ('paid',)
+        widgets = {
+            'paid' : forms.CheckboxInput(attrs={'class':"form-check-input",
+                                                               'type':'checkbox',
+                                                               'role':'switch',
+                                                               'id':'flexSwitchCheckDefault',
+                                                               })
+
+        }
+        
