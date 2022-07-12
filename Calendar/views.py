@@ -35,9 +35,9 @@ def eventcontext(request):
                 paid = '#6c786c'
             lessons.append(
                 {
-                    'title' : f"{str(lesson.__dict__['title'])} {str(datetime.strftime(lesson.__dict__['start'],'%H:%M'))}",
-                    'start' : datetime.strftime(lesson.__dict__['start'],'%Y-%m-%d'),
-                    'end': datetime.strftime(lesson.__dict__['end'],'%Y-%m-%d'),
+                    'title' : f"{str(lesson.__dict__['title'])}",
+                    'start' : datetime.strftime(lesson.__dict__['start'],'%Y-%m-%d %H%M'),
+                    'end': datetime.strftime(lesson.__dict__['end'],'%Y-%m-%d %H%M'),
                     'url': '/home/event/' + str(lesson.__dict__['id']),
                     'borderColor': paid,
                     'backgroundColor' : paid,

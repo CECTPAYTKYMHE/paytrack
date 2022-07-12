@@ -11,6 +11,8 @@
             <label class="form-check-label" for="flexSwitchCheckDefault">Оплачено</label>
           </div>
     </div>
-    <button class="w-30 btn btn-lg btn-primary" type="submit">Сохранить</button>
+    <button class="btn btn-primary" type="submit">Сохранить</button>
+    <a href="{{request.META.HTTP_REFERER}}"><button type="button" class="btn btn-primary">Назад</button></a>
+
 </form>
 {% endblock content %}
