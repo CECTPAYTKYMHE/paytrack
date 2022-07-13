@@ -41,6 +41,7 @@ class Event(models.Model):
     paid = models.BooleanField('Произошла ли оплата?', default=False)
     master_event = models.ForeignKey(Calendar,on_delete=models.CASCADE, verbose_name='Событие')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Репетитор')
+    price_event = models.PositiveIntegerField('Цена за урок')
     
     def __str__(self):
         return f'{str(self.master_event)} {str(self.start)}'

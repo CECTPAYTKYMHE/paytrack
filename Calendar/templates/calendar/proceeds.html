@@ -1,0 +1,28 @@
+﻿{% extends "main/base.html" %}
+{% block content %}
+  <table class="table my-4">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Количество занятий</th>
+        <th scope="col">Из них неоплаченных</th>
+        <th scope="col">Заработок (Оплачено/Неоплачено)</th>
+        <th scope="col">Возможный заработок</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Неделя</th>
+        <td>{{weeklessons}}</td>
+        <td>{{unpaidweek}}</td>
+        <td>{{cash_week_earn}}/{{cash_week_unearn}}</td>
+        <td>{{all_earn_week}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Месяц</th>
+        <td>{{monthlessons}}</td>
+        <td>{{unpaidmonth}}</td>
+        <td>{{cash_month_earn}}/{{cash_month_unearn}}</td>
+        <td>{{all_earn_month}}</td>
+      </tr>
+{% endblock content %}

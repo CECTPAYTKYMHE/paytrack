@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 import requests
-
+import calendar
 from Calendar.forms import AddCalendarForms, PaidEventForms
 from .models import *
 from Calendar.serializers import EventSerializer
@@ -77,13 +77,17 @@ class AddCalendar(View):
                                 user = Profile.objects.get(user = request.user)) #Создаем событие календаря
         
         if repeat:
-            addeventfromcalendar(calendar,calendar.time_start, calendar.title, request.user) #Создаются повторяющиеся события(уроки) сроком на 1 год
+            addeventfromcalendar(calendar,calendar.time_start, 
+                                 calendar.title, 
+                                 request.user,
+                                 calendar.price) #Создаются повторяющиеся события(уроки) сроком на 1 год
         else:
             Event.objects.create(start=calendar.time_start,
                                  end = calendar.time_start,
                                  title = str(calendar.title).split(' ')[0],
                                  master_event=calendar,
-                                 user=request.user) #Если не повторяется создается 1 событие
+                                 user=request.user,
+                                 price_event=calendar.price) #Если не повторяется создается 1 событие
 
         return HttpResponseRedirect(reverse('calendar:addevent'))
 
@@ -99,14 +103,21 @@ class AddCalendar(View):
             }
         return render(request, 'calendar/addevent.html',context)
 
-def addeventfromcalendar(calendar, time, title, user):
+def addeventfromcalendar(calendar, time, title, user, price_event):
+    """Создание 52 уроков на год при чек боксе повторяющегося события"""
     title = str(title).split(' ')[0]
     time = datetime.strptime(time,'%Y-%m-%dT%H:%M')
     for i in range(52):
-        Event.objects.create(start=time,master_event=calendar,end=time, title=title,user=user)
+        Event.objects.create(start=time,
+                             master_event=calendar,
+                             end=time, 
+                             title=title,
+                             user=user,
+                             price_event=price_event)
         time += timedelta(7)
 
 class ShowEvent(View):
+    """Показ и изменение события(урока) с чекбоксами о оплате и удаления события"""
     def get(self,request,pk,*args, **kwargs):
         event = Event.objects.get(pk=pk,user=request.user)
         form = PaidEventForms()
@@ -120,15 +131,52 @@ class ShowEvent(View):
         return render(request, 'calendar/event.html',context)
     
     def post(self,request,pk,*args, **kwargs):
-        if 'paid' in request.POST:
-            paid = Event.objects.get(pk=pk)
-            paid.paid = True
-            paid.save()
+        if 'unluck' in request.POST:
+            Event.objects.get(pk=pk).delete()
         else:
-            paid = Event.objects.get(pk=pk)
-            paid.paid = False
-            paid.save()
-            
+            if 'paid' in request.POST:
+                paid = Event.objects.get(pk=pk)
+                paid.paid = True
+                paid.save()
+            else:
+                paid = Event.objects.get(pk=pk)
+                paid.paid = False
+                paid.save()
         return redirect('calendar:home')
         
-
+def proceeds(request):
+    """Математика заработка преподавателя"""
+    theday = date.today()
+    weekday = theday.isoweekday()
+    month = datetime.now().month
+    year = datetime.now().year
+    number_of_days = calendar.monthrange(year, month)[1]
+    first_date = date(year, month, 1)
+    last_date = date(year, month, number_of_days)
+    last_date = last_date + timedelta(days=1)
+    start = theday - timedelta(days=weekday-1)
+    dates_week = [start + timedelta(days=d) for d in range(8)]
+    weeklessons = Event.objects.filter(start__range = [dates_week[0],dates_week[7]],user=request.user)
+    monthlessons = Event.objects.filter(start__range = [first_date,last_date],user=request.user)
+    unpaidweek = len([day for day in weeklessons if day.paid == False])
+    cash_week_earn = sum([allrub.price_event for allrub in weeklessons if allrub.paid])
+    cash_week_unearn = sum([allrub.price_event for allrub in weeklessons if not allrub.paid])
+    all_earn_week = cash_week_earn + cash_week_unearn
+    unpaidmonth = len([day for day in monthlessons if day.paid == False])
+    cash_month_earn = sum([allrub.price_event for allrub in monthlessons if allrub.paid])
+    cash_month_unearn = sum([allrub.price_event for allrub in monthlessons if not allrub.paid])
+    all_earn_month = cash_month_earn + cash_month_unearn
+    
+    context = {
+        'unpaidweek' : unpaidweek,
+        'weeklessons' : len(weeklessons),
+        'cash_week_earn' : cash_week_earn,
+        'cash_week_unearn' : cash_week_unearn,
+        'all_earn_week' : all_earn_week,
+        'monthlessons': len(monthlessons),
+        'unpaidmonth': unpaidmonth,
+        'cash_month_earn': cash_month_earn,
+        'cash_month_unearn': cash_month_unearn,
+        'all_earn_month': all_earn_month,
+    }
+    return render(request,'calendar/proceeds.html',context)
