@@ -17,9 +17,8 @@
           fixedWeekCount: false,
           initialView: 'listWeek',
           firstDay: 1,
-          
-          headerToolbar: window.mobilecheck() ? {  left: 'dayGridDay,timeGridWeek,listWeek' } : {  left: 'dayGridDay,timeGridWeek,dayGridMonth,listWeek',center: 'title', },
-          
+          headerToolbar: window.mobilecheck() ? {  right: 'dayGridDay,timeGridWeek,listWeek' } : {  right: 'timeGridWeek,dayGridMonth,listWeek',left: 'title' },
+          footerToolbar: window.mobilecheck() ? {   end: 'today prev,next'  } : { end: 'today prev,next' },
             locales: 'ru',
             themeSystem: 'Sandstonde',
             timeZone: 'UTC',

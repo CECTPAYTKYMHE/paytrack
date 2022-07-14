@@ -1,28 +1,57 @@
 ﻿{% extends "main/base.html" %}
 {% block content %}
-  <table class="table my-4">
-    <thead class="table-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Количество занятий</th>
-        <th scope="col">Из них неоплаченных</th>
-        <th scope="col">Заработок (Оплачено/Неоплачено)</th>
-        <th scope="col">Возможный заработок</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">Неделя</th>
-        <td>{{weeklessons}}</td>
-        <td>{{unpaidweek}}</td>
-        <td>{{cash_week_earn}}/{{cash_week_unearn}}</td>
-        <td>{{all_earn_week}}</td>
-      </tr>
-      <tr>
-        <th scope="row">Месяц</th>
-        <td>{{monthlessons}}</td>
-        <td>{{unpaidmonth}}</td>
-        <td>{{cash_month_earn}}/{{cash_month_unearn}}</td>
-        <td>{{all_earn_month}}</td>
-      </tr>
+  {% if show %}
+      <div>
+      <table class="table my-4">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Неделя</th>
+            <th scope="col">Месяц</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Количество занятий</th>
+            <td>{{weeklessons}}</td>
+            <td>{{monthlessons}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Из них неоплаченных</th>
+            <td>{{unpaidweek}}</td>
+            <td>{{unpaidmonth}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Заработок (Оплачено/Неоплачено)</th>
+            <td>{{cash_week_earn}}/{{cash_week_unearn}}</td>
+            <td>{{cash_month_earn}}/{{cash_month_unearn}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Возможный заработок</th>
+            <td>{{all_earn_week}}</td>
+            <td>{{all_earn_month}}</td>
+          </tr>
+          </tbody>
+          </table>
+          
+        </div>
+        <h6>Произвольные даты</h3>
+          <div>
+            <form action="{% url 'calendar:proceeds' %}" method="post">
+              {% csrf_token %}
+            {{form.start}}<br><br>{{form.end}}<br>
+            <button class="w-30 btn btn btn-dark my-4" type="submit">Показать</button>
+            </form>
+          </div>
+          {% else %}
+            <div class="my-4">
+              <h6>Произвольные даты</h6>
+              <form action="{% url 'calendar:proceeds' %}" method="post">
+                {% csrf_token %}
+              {{form.start}}<br><br>{{form.end}}<br>
+              <button class="w-30 btn btn btn-dark my-4" type="submit">Показать</button>
+              </form>
+              <h6>В промежутке с {{start|date:"d M Y"}} 00:00 по {{end|date:"d M Y"}} 00:00 Вы заработали {{totalmanual}} у.е.</h6>
+            </div>
+          {% endif %}
 {% endblock content %}

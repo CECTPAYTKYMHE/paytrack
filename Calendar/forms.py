@@ -1,4 +1,5 @@
-﻿from django import forms
+﻿from datetime import datetime
+from django import forms
 from .models import *
 
 
@@ -34,4 +35,7 @@ class PaidEventForms(forms.ModelForm):
                                                                })
 
         }
-        
+
+class ManualProceed(forms.Form):
+    start = forms.DateField(widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    end = forms.DateField(widget=forms.widgets.DateInput(attrs={'type': 'date'}))
