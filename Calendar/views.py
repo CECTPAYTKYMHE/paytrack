@@ -137,8 +137,13 @@ class ShowEvent(View):
     
 
     def post(self,request,pk,*args, **kwargs):
+        """Удаление цепочки неоплаченных уроков, отмена занятий и чек бокс оплаты"""
         if 'unluck' in request.POST:
             Event.objects.get(pk=pk).delete()
+        if 'delcalendar' in request.POST:
+            master = Event.objects.get(pk=pk)
+            master_event = Calendar.objects.get(pk=master.master_event_id)
+            Event.objects.filter(master_event=master_event, paid = False).delete()
         else:
             if 'paid' in request.POST:
                 paid = Event.objects.get(pk=pk)

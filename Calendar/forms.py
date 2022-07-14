@@ -32,6 +32,7 @@ class PaidEventForms(forms.ModelForm):
                                                                'type':'checkbox',
                                                                'role':'switch',
                                                                'id':'flexSwitchCheckDefault',
+                                                               'style':'transform: scale(1.5)',
                                                                })
 
         }
