@@ -20,7 +20,6 @@ class AddCalendarForms(forms.ModelForm):
         super(AddCalendarForms,self).__init__(*args, **kwargs)
         for field_name, filed in self.fields.items():
             filed.widget.attrs['class'] = 'form-control'
-            # <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {% if event.paid %}checked{% endif %}>
 
 class PaidEventForms(forms.ModelForm):
     
@@ -40,3 +39,4 @@ class PaidEventForms(forms.ModelForm):
 class ManualProceed(forms.Form):
     start = forms.DateField(widget=forms.widgets.DateInput(attrs={'type': 'date'}))
     end = forms.DateField(widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+

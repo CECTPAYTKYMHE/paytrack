@@ -4,6 +4,10 @@
     {% csrf_token %}
     <div class="mb-3 row my-4">
         <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm" aria-label=".form-control-sm example" value="{{event.title}} {{event.start}} | Цена занятия: {{event.price_event}}" readonly>
+        <div class="mb-3">
+          <label for="exampleFormControlTextarea1" class="form-label">Заметки о ученике</label>
+          <textarea class="form-control" name='description' id="exampleFormControlTextarea1" rows="3">{{student_desc}}</textarea>
+        </div>
         <div class="form-check form-switch my-4 mx-4">
             {{form.paid}}
             <label class="form-check-label mx-2" for="form.paid.id_for_label">Оплачено</label>

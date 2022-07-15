@@ -105,19 +105,21 @@ class AddCalendar(View):
             }
         return render(request, 'calendar/addevent.html',context)
 
-@login_required
+
 def addeventfromcalendar(calendar, time, title, user, price_event):
     """Создание 52 уроков на год при чек боксе повторяющегося события"""
     title = str(title).split(' ')[0]
     time = datetime.strptime(time,'%Y-%m-%dT%H:%M')
+    objs = []
     for i in range(52):
-        Event.objects.create(start=time,
-                             master_event=calendar,
-                             end=time, 
-                             title=title,
-                             user=user,
-                             price_event=price_event)
+        objs.append(Event(start=time,
+                            master_event=calendar,
+                            end=time, 
+                            title=title,
+                            user=user,
+                            price_event=price_event))
         time += timedelta(7)
+    Event.objects.bulk_create(objs)
 
 
 class ShowEvent(View):
@@ -125,6 +127,7 @@ class ShowEvent(View):
 
     def get(self,request,pk,*args, **kwargs):
         event = Event.objects.get(pk=pk,user=request.user)
+        student = Customer.objects.get(name=event.title,user=request.user)
         form = PaidEventForms()
         if event.paid:
             form.fields['paid'].widget.attrs['checked'] = ''
@@ -132,16 +135,17 @@ class ShowEvent(View):
                 'form': form,
                 'title' : event.title,
                 'event' : event,
+                'student_desc': student.description,
             }
         return render(request, 'calendar/event.html',context)
     
 
     def post(self,request,pk,*args, **kwargs):
         """Удаление цепочки неоплаченных уроков, отмена занятий и чек бокс оплаты"""
+        master = Event.objects.get(pk=pk)
         if 'unluck' in request.POST:
             Event.objects.get(pk=pk).delete()
         if 'delcalendar' in request.POST:
-            master = Event.objects.get(pk=pk)
             master_event = Calendar.objects.get(pk=master.master_event_id)
             Event.objects.filter(master_event=master_event, paid = False).delete()
         else:
@@ -153,6 +157,9 @@ class ShowEvent(View):
                 paid = Event.objects.get(pk=pk)
                 paid.paid = False
                 paid.save()
+        student = Customer.objects.get(name=master.title, user=request.user)
+        student.description = request.POST['description']
+        student.save()
         return redirect('calendar:home')
 
 class Proceeds(View):
@@ -210,5 +217,3 @@ class Proceeds(View):
             'end' : end,
         }
         return render(request,'calendar/proceeds.html', context)
-
-    
