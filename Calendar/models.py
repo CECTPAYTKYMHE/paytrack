@@ -6,7 +6,7 @@ from django.urls import reverse
 class Customer(models.Model):
     """Модель заказчика"""
     name = models.CharField('Заказчик', max_length=64)
-    description = models.TextField('Описание',blank=True,null=True)
+    description = models.TextField('Описание',blank=True, null=True, default='Поле для заметок')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Репетитор')
     
     def __str__(self):

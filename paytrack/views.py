@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib import auth, messages
+from django.views import View
 from paytrack.forms import UserLoginForm, UserRegistrationForm
 from django.contrib.auth.models import User
 from Calendar.models import Profile
@@ -55,3 +56,10 @@ def register(request):
         'title': 'Создание профиля',
     }
     return render(request, 'main/register.html', context)
+
+class MyAccount(View):
+    
+    def get(self,request,*args, **kwargs):
+        
+        return render(request,'main/account.html')
+    
