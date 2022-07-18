@@ -1,4 +1,8 @@
 ﻿{% extends "main/base.html" %}
 {% block content %}
-{{student}}
+<h5>{{student}}</h5>
+<div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Заметки о ученике</label>
+    <textarea class="form-control" name='description' id="exampleFormControlTextarea1" rows="3">{{student.description}}</textarea>
+  </div>
 {% endblock content %}

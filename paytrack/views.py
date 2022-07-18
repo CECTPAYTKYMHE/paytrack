@@ -80,7 +80,7 @@ class MyAccount(View):
         return HttpResponseRedirect(reverse('myaccount'))
     
 def show_student(request,pk):
-    student = Customer.objects.get(pk=pk)
+    student = Customer.objects.get(pk=pk, user=request.user)
     context = {
         'student' : student,
     }
