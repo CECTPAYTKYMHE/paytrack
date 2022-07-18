@@ -13,7 +13,7 @@ class Customer(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('calendar:students', kwargs={'pk': self.pk})
+        return reverse('students', kwargs={'pk': self.pk})
 
 class Profile(models.Model):
     """Расширение класса User для добавлние поля id telegramm"""

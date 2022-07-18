@@ -1,6 +1,5 @@
-﻿from datetime import datetime
-from django import forms
-from .models import *
+﻿from django import forms
+from .models import Event, Calendar
 
 
 class AddCalendarForms(forms.ModelForm):

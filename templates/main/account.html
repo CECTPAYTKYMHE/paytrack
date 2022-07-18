@@ -1,5 +1,27 @@
 ﻿{% extends "main/base.html" %}
 {% block content %}
+<div class="form-floating my-2">
+    {{ user_form.username }}
+  <label for="{{ user_form.username.id_for_label }}">Пользователь</label>
+</div>
+<div class="form-floating">
+    {{ user_form.email }}
+  <label for="{{ user_form.email.id_for_label }}">Email</label>
+</div>
+<form action="{% url 'myaccount' %}" method="post">
+  {% csrf_token %}
+<div class="form-floating my-2">
+    {{ profile_form.telegram_id }}
+  <label for="{{ profile_form.telegram_id.id_for_label }}">Telegram</label>
+</div>
+<button class="w-30 btn btn btn-dark my-2" type="submit">Сохранить</button>
 
-  
+</form>
+
+<ul class="list-group">
+  {% for student in students %}
+  <li class="list-group-item"><a href="{% url 'student' pk=student.id %}">{{student}}</a></li>
+  {% endfor %}
+</ul>
+
 {% endblock content %}

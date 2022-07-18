@@ -3,9 +3,9 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib import auth, messages
 from django.views import View
-from paytrack.forms import UserLoginForm, UserRegistrationForm
+from paytrack.forms import ProfileForms, UserForms, UserLoginForm, UserRegistrationForm
 from django.contrib.auth.models import User
-from Calendar.models import Profile
+from Calendar.models import Customer, Profile
 
 def login(request):
     """Функция для авторизации пользователя"""
@@ -60,6 +60,28 @@ def register(request):
 class MyAccount(View):
     
     def get(self,request,*args, **kwargs):
-        
-        return render(request,'main/account.html')
+        user = User.objects.get(username=request.user)
+        user_form = UserForms()
+        profile_form = ProfileForms()
+        user_form.fields['username'].widget.attrs['value'] = user.username
+        user_form.fields['email'].widget.attrs['value'] = user.email
+        profile_form.fields['telegram_id'].widget.attrs['value'] = user.profile.telegram_id
+        students = Customer.objects.filter(user=user)
+        context = {
+            'user_form': user_form,
+            'profile_form': profile_form,
+            'students': students,
+        }
+        return render(request,'main/account.html', context)
     
+    def post(self,request,*args, **kwargs):
+        Profile.objects.filter(user=request.user).update(telegram_id=int(request.POST['telegram_id']))
+        # profile.update(telegram_id=int(request.POST['telegram_id']))
+        return HttpResponseRedirect(reverse('myaccount'))
+    
+def show_student(request,pk):
+    student = Customer.objects.get(pk=pk)
+    context = {
+        'student' : student,
+    }
+    return render(request,'main/students.html',context)

@@ -77,3 +77,4 @@ class Proceeds(View):
     def post(self,request,*args, **kwargs):
         context = calculate_proceeds_for_post(request)
         return render(request,'calendar/proceeds.html', context)
+

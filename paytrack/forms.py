@@ -1,7 +1,7 @@
 ﻿from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django import forms
-from django.forms import ModelForm
 from django.contrib.auth.models import User
+
 from Calendar.models import Profile
 
 class UserLoginForm(AuthenticationForm):
@@ -39,5 +39,35 @@ class UserRegistrationForm(UserCreationForm):
         for field_name, filed in self.fields.items():
             filed.widget.attrs['class'] = 'form-control'
 
+class UserForms(forms.ModelForm):
+    
+    class Meta:
+        model = User
+        
+        fields = ('username', 'email', )
+        widgets = {
+            'username' : forms.TextInput(attrs={'class':"form-control",
+                                                'disabled':'',
+                                                'readonly':'',
+                                                }),
+            'email' : forms.TextInput(attrs={'class':"form-control",
+                                                'disabled':'',
+                                                'readonly':''
+                                                })
+        }
+        
+class ProfileForms(forms.ModelForm):
+    
+    class Meta:
+        model = Profile
+        
+        fields = ('telegram_id', )
+        widgets = {
+            'telegram_id' : forms.TextInput(attrs={'class':"form-control",
+                                                }),
+            
+        }
+        
+        
     
     
