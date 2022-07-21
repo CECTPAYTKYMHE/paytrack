@@ -1,5 +1,8 @@
 ﻿{% extends "main/base.html" %}
 {% block content %}
+<div class="container py-4">
+  <div class="row">
+    <div class="col">
 <div class="form-floating my-2">
     {{ user_form.username }}
   <label for="{{ user_form.username.id_for_label }}">Пользователь</label>
@@ -17,8 +20,8 @@
 <button class="w-30 btn btn btn-dark my-2" type="submit">Сохранить</button>
 
 </form>
-
-<div class="col-4 my-4">
+</div>
+<div class="col-md">
 <ul class="list-group">
   <li class="list-group-item active" aria-current="true">Мои ученики</li>
   {% for student in students %}

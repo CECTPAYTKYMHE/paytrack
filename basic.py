@@ -24,16 +24,16 @@
 
 # assert isinstance(testint('f', 'd'), int), 'Должен быть int'
 
-from dataclasses import dataclass
+# from dataclasses import dataclass
 
 
-@dataclass
-class Testclass():
-    a:int
-    b:int
-    c:str
+# @dataclass
+# class Testclass():
+#     a:int
+#     b:int
+#     c:str
 
 
 
-kekew = Testclass('f',4,7)
-print(kekew.__dict__)
+# kekew = Testclass('f',4,7)
+# print(kekew.__dict__)

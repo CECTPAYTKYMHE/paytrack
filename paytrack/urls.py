@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
-from .views import login, register, MyAccount, show_student
+from .views import login, register, MyAccount, Show_edit_student
 from Calendar.views import EventsListViewSet
 from rest_framework import routers
 from django.contrib.auth.views import LogoutView
@@ -18,5 +18,5 @@ urlpatterns = [
     path('home/', include(('Calendar.urls', 'calendar'))),
     path('api/', include(router.urls)),
     path('myaccount/', login_required(MyAccount.as_view()),name='myaccount'),
-    path('students/<int:pk>/', show_student, name='student'),
+    path('students/<int:pk>/', login_required(Show_edit_student.as_view()), name='student'),
 ]

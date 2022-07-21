@@ -66,7 +66,7 @@ class MyAccount(View):
         user_form.fields['username'].widget.attrs['value'] = user.username
         user_form.fields['email'].widget.attrs['value'] = user.email
         profile_form.fields['telegram_id'].widget.attrs['value'] = user.profile.telegram_id
-        students = Customer.objects.filter(user=user)
+        students = Customer.objects.filter(user=user).order_by('name')
         context = {
             'user_form': user_form,
             'profile_form': profile_form,
@@ -78,10 +78,16 @@ class MyAccount(View):
         Profile.objects.filter(user=request.user).update(telegram_id=int(request.POST['telegram_id']))
         # profile.update(telegram_id=int(request.POST['telegram_id']))
         return HttpResponseRedirect(reverse('myaccount'))
+
+class Show_edit_student(View):
     
-def show_student(request,pk):
-    student = Customer.objects.get(pk=pk, user=request.user)
-    context = {
+    def get(self,request,pk,*args, **kwargs):
+        student = Customer.objects.get(pk=pk, user=request.user)
+        context = {
         'student' : student,
-    }
-    return render(request,'main/students.html',context)
+                    }
+        return render(request,'main/students.html',context)
+    
+    def post(self,request,pk,*args, **kwargs):
+        Customer.objects.filter(pk=pk).update(description=request.POST['description'])
+        return HttpResponseRedirect(reverse('student', args=[pk]))
