@@ -1,7 +1,7 @@
 ﻿from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django import forms
 from django.contrib.auth.models import User
-
+from captcha.fields import CaptchaField
 from Calendar.models import Profile
 
 class UserLoginForm(AuthenticationForm):
@@ -26,9 +26,10 @@ class UserRegistrationForm(UserCreationForm):
     email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Введите адрес эл. почты'}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Введите пароль'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Подтвердите пароль'}))
-    telegram_id = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Введите id телеграмм'}))
+    telegram_id = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Введите id телеграмм',
+                                                                'maxlength': "10",}))
+    captcha = CaptchaField()
 
-    # captcha = CaptchaField(label='Введите символы')
     
     class Meta:
         model = User
@@ -64,6 +65,7 @@ class ProfileForms(forms.ModelForm):
         fields = ('telegram_id', )
         widgets = {
             'telegram_id' : forms.TextInput(attrs={'class':"form-control",
+                                                   'maxlength': "10",
                                                 }),
             
         }

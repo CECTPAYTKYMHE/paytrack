@@ -2,8 +2,13 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <meta name="keywords" content="репетитор планировщик расписание онлайн бесплатно" />
+    <meta name="google-site-verification" content="pr8v6JodhvGZqALzaNLlcITrQXDkEfibK-BPARX03YA" />
+    <meta name="yandex-verification" content="d2c51d6a844c301f" />
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
 <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <style>
@@ -57,14 +62,28 @@
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
       }
+      .bd-masthead {
+        --bd-pink-rgb: 214,51,132;
+        padding: 3rem 0;
+        background-image: linear-gradient(180deg, rgba(var(--bs-body-bg-rgb), 0.01), rgba(var(--bs-body-bg-rgb), 1) 85%),radial-gradient(ellipse at top left, rgba(var(--bs-primary-rgb), 0.5), transparent 50%),radial-gradient(ellipse at top right, rgba(var(--bd-accent-rgb), 0.5), transparent 50%),radial-gradient(ellipse at center right, rgba(var(--bd-violet-rgb), 0.5), transparent 50%),radial-gradient(ellipse at center left, rgba(var(--bd-pink-rgb), 0.5), transparent 50%);
+    }
     </style>
 
-    
+
+    <script src="{% static 'main/js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+      $(document).ready(function(){
+        // Enable popovers everywhere
+          $('[data-bs-toggle="popover"]').popover();  
+      });
+      </script>
     <!-- Custom styles for this template -->
     <link href="{% static 'main/css/signin.css' %}" rel="stylesheet">
   </head>
+  
   <body class="text-center">
-    
+
 <main class="form-signin w-100 m-auto">
     {% include "main/message.html" %}
   <form action="{% url 'login' %}" method="post">
@@ -80,12 +99,27 @@
       <label for="floatingPassword">Пароль</label>
     </div>
     <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
+    <p class="mt-5 mb-3 text-muted">&copy; Tutorplan 2022
+      <a
+                tabindex="0"
+                data-feather="help-circle"
+                role="button"
+                data-bs-toggle="popover"
+                data-bs-trigger="focus"
+                title="О чём этот сайт?"
+                data-bs-content="Помощник репетитора: календарь событий(уроков), калькуляция дохода, уведомление в telegram об оплате урока, заметки об учениках"
+              >
+              </a>
+    </p>
+              
   </form>
-  <h6><a href="{% url 'register' %}">Регистрация</a></h6>
+  <h6>Нет аккаунта? <a href="{% url 'register' %}">Регистрация</a></h6>
 </main>
+<script src="{% static 'main/js/feather.min.js' %}"></script>
+<script src="{% static 'main/js/dashboard.js' %}"></script>
 
+{% include "main/yandex.html" %}
 
-    
   </body>
+
 </html>

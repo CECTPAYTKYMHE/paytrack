@@ -8,6 +8,6 @@
     <textarea class="form-control" name='description' id="exampleFormControlTextarea1" rows="3">{{student.description}}</textarea>
   </div>
   <button class="btn btn-primary" type="submit">Сохранить</button>
-  <a href="{{request.META.HTTP_REFERER}}"><button type="button" class="btn btn-primary">Назад</button></a>
+  <a href="{% url 'myaccount' %}"><button type="button" class="btn btn-primary">Назад</button></a>
   </form>
 {% endblock content %}

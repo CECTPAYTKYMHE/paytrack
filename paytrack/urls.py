@@ -19,4 +19,5 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('myaccount/', login_required(MyAccount.as_view()),name='myaccount'),
     path('students/<int:pk>/', login_required(Show_edit_student.as_view()), name='student'),
+    path('captcha/', include('captcha.urls')),
 ]

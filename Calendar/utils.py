@@ -1,4 +1,6 @@
 ﻿import calendar
+
+from django.shortcuts import redirect
 from Calendar.forms import ManualProceed
 from .models import *
 from datetime import date, datetime, timedelta
@@ -33,19 +35,21 @@ def create_event_context(request) -> json:
     return json_lessons
 
 
-def add_event_from_calendar(customer_calendar, time, title, user, price_event):
+def add_event_from_calendar(customer_calendar, time_start, time_end, title, user, price_event):
     """Создание 52 уроков на год при чек боксе повторяющегося события"""
     title = str(title).split(' ')[0]
-    time = datetime.strptime(time,'%Y-%m-%dT%H:%M')
+    time_start = datetime.strptime(time_start,'%Y-%m-%dT%H:%M')
+    time_end = datetime.strptime(time_end,'%Y-%m-%dT%H:%M')
     objs = []
     for i in range(52):
-        objs.append(Event(start=time,
+        objs.append(Event(start=time_start,
                             master_event=customer_calendar,
-                            end=time, 
+                            end=time_end, 
                             title=title,
                             user=user,
                             price_event=price_event))
-        time += timedelta(7)
+        time_start += timedelta(7)
+        time_end += timedelta(7)
     Event.objects.bulk_create(objs)
 
 
@@ -72,13 +76,15 @@ def add_calendar_and_event(request):
                                 user = Profile.objects.get(user = request.user)) #Создаем событие календаря
         
     if repeat:
-        add_event_from_calendar(customer_calendar,customer_calendar.time_start, 
-                            customer_calendar.title, 
-                            request.user,
-                            customer_calendar.price) #Создаются повторяющиеся события(уроки) сроком на 1 год
+        add_event_from_calendar(customer_calendar,
+                                customer_calendar.time_start, 
+                                customer_calendar.time_end,
+                                customer_calendar.title, 
+                                request.user,
+                                customer_calendar.price) #Создаются повторяющиеся события(уроки) сроком на 1 год
     else:
         Event.objects.create(start=customer_calendar.time_start,
-                            end = customer_calendar.time_start,
+                            end = customer_calendar.time_end,
                             title = str(customer_calendar.title).split(' ')[0],
                             master_event=customer_calendar,
                             user=request.user,
@@ -90,9 +96,11 @@ def event_edit(request, pk):
     master = Event.objects.get(pk=pk)
     if 'unluck' in request.POST:
         Event.objects.get(pk=pk).delete()
+        return redirect('calendar:home')
     if 'delcalendar' in request.POST:
         master_event = Calendar.objects.get(pk=master.master_event_id)
         Event.objects.filter(master_event=master_event, paid = False).delete()
+        return redirect('calendar:home')
     else:
         if 'paid' in request.POST:
             paid = Event.objects.get(pk=pk)

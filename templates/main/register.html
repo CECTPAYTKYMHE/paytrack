@@ -62,8 +62,10 @@
     
     <!-- Custom styles for this template -->
     <link href="{% static 'main/css/signin.css' %}" rel="stylesheet">
+  
   </head>
   <body class="text-center">
+   
 <main class="form-signin w-100 m-auto">
   {% include "main/message.html" %}
 
@@ -92,11 +94,16 @@
     {{ form.telegram_id }}
   <label for="{{ form.telegram_id.id_for_label }}">ID Telegram</label>
 </div>
+<div class="form-floating my-2">
+  <label for="{{ form.captcha.id_for_label }}" class= 'my-3' >Введите символы с картинки</label>
+  {{ form.captcha }}
+</div>
+
     <button class="w-100 btn btn-lg btn-primary" type="submit">Регистрация</button>
-    <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
+    <p class="mt-5 mb-3 text-muted">&copy; Tutorplan 2022</p>
   </form>
   <h6><a href="{% url 'login' %}">Уже есть аккаунт? Войти</a></h6>
 </main>
-
+{% include "main/yandex.html" %}
   </body>
 </html>
