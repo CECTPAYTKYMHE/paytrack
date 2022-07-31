@@ -3,13 +3,14 @@
 <html lang="en">
   <head>
     <meta name="keywords" content="репетитор планировщик расписание онлайн бесплатно" />
+    <meta name="description" content="Бесплатный сайт помощник репетитора | Планирование занятий | Расписание занятий с калькуляцией дохода">
     <meta name="google-site-verification" content="pr8v6JodhvGZqALzaNLlcITrQXDkEfibK-BPARX03YA" />
     <meta name="yandex-verification" content="d2c51d6a844c301f" />
-    
+    <link rel="icon" type="image/svg+xml" href="{% static 'main/image/favicon.svg' %}"/>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-<link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'main/icons/bootstrap-icons.css' %}" rel='stylesheet'>
+    <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -78,12 +79,18 @@
           $('[data-bs-toggle="popover"]').popover();  
       });
       </script>
+      <script>
+        $(document).ready(function(){
+            $("#myBtn").click(function(){
+                $("#myToast").toast("show");
+            });
+        });
+        </script>
     <!-- Custom styles for this template -->
     <link href="{% static 'main/css/signin.css' %}" rel="stylesheet">
   </head>
   
   <body class="text-center">
-
 <main class="form-signin w-100 m-auto">
     {% include "main/message.html" %}
   <form action="{% url 'login' %}" method="post">
@@ -114,6 +121,14 @@
               
   </form>
   <h6>Нет аккаунта? <a href="{% url 'register' %}">Регистрация</a></h6>
+  <div class="toast show align-items-center" role="alert" aria-live="assertive" aria-atomic="true" id="myToast">
+    <div class="d-flex">
+      <div class="toast-body">
+        Мы используем файлы cookie, чтобы обеспечить Вам наилучшую работу на нашем веб-сайте и проанализировать его использование. Продолжая использовать этот сайт, Вы даете согласие на использование файлов cookie. 
+      </div>
+      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
 </main>
 <script src="{% static 'main/js/feather.min.js' %}"></script>
 <script src="{% static 'main/js/dashboard.js' %}"></script>

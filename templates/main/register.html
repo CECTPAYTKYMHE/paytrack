@@ -2,9 +2,13 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <meta name="keywords" content="репетитор планировщик расписание онлайн бесплатно" />
+    <meta name="description" content="Бесплатный сайт помощник репетитора | Планирование занятий | Расписание занятий с калькуляцией дохода">
     <meta charset="utf-8">
+    <link rel="icon" type="image/svg+xml" href="{% static 'main/image/favicon.svg' %}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
+<link rel="shortcut icon" type="image/svg+xml" href="{% static 'main/image/favicon.svg' %}"/>
 
     <style>
       .bd-placeholder-img {
@@ -62,17 +66,25 @@
     
     <!-- Custom styles for this template -->
     <link href="{% static 'main/css/signin.css' %}" rel="stylesheet">
-  
+    <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
   </head>
   <body class="text-center">
-   
+    
 <main class="form-signin w-100 m-auto">
-  {% include "main/message.html" %}
-
+{% if form.errors %}
+<div class="mx-auto">
+  <div class="alert alert-warning alert-dismissible fade show " role="alert">
+  {% for error in form.errors.values %}
+    {{error}}
+  {% endfor %}
+  <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+</div>
+{% endif %}
   <form action="{% url 'register' %}" method="post">
     {% csrf_token %}
     <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
-
+  </div>
     <div class="form-floating">
         {{ form.username }}
       <label for="{{ form.username.id_for_label }}">Пользователь</label>
@@ -85,14 +97,21 @@
     <div class="form-floating">
         {{ form.password1 }}
       <label for="{{ form.password1.id_for_label }}">Пароль</label>
+      
     </div>
     <div class="form-floating">
       {{ form.password2 }}
     <label for="{{ form.password2.id_for_label }}">Повторите пароль</label>
+    <small id="passwordHelpBlock" class="form-text text-muted">
+      Пароль должен быть не меньше 8 символов и содержать маленькие и большие латинские буквы и цифры.
+    </small>
   </div>
   <div class="form-floating mb-3">
     {{ form.telegram_id }}
   <label for="{{ form.telegram_id.id_for_label }}">ID Telegram</label>
+  <small id="passwordHelpBlock" class="form-text text-muted">
+    Свой ID вы можете получить у специализированных ботов, например <a href="https://t.me/getmyid_bot">getmyid_bot</a>
+  </small>
 </div>
 <div class="form-floating my-2">
   <label for="{{ form.captcha.id_for_label }}" class= 'my-3' >Введите символы с картинки</label>

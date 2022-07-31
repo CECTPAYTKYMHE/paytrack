@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <link rel="icon" type="image/svg+xml" href="{% static 'main/image/favicon.svg' %}"/>
     <title>{{title}}</title>
 <link href="{% static 'main/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'main/icons/bootstrap-icons.css' %}" rel='stylesheet'>
@@ -78,7 +78,7 @@
   <body>
     
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Планировщик репетитора</a>
+  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="{% url 'calendar:home' %}">Планировщик репетитора</a>
   <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -109,7 +109,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'myaccount' %}">
+            <a class="nav-link {% if url_name == 'myaccount' %}active{% endif %}" href="{% url 'myaccount' %}">
               <span data-feather="user" class="align-text-bottom"></span>
               Личный кабинет
             </a>
@@ -134,6 +134,7 @@
     <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
       <script src="{% static 'main/js/feather.min.js' %}"></script>
       <script src="{% static 'main/js/dashboard.js' %}"></script>
-      {% include "main/yandex.html" %}
+      
   </body>
+  
 </html>

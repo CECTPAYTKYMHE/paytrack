@@ -37,3 +37,7 @@
 
 # kekew = Testclass('f',4,7)
 # print(kekew.__dict__)
+import pytz
+import zoneinfo
+# print(pytz.all_timezones)
+print(zoneinfo.ZoneInfo('Europe/Moscow'))

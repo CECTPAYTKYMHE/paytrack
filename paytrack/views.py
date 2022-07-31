@@ -1,11 +1,12 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib import auth, messages
 from django.views import View
 from paytrack.forms import ProfileForms, UserForms, UserLoginForm, UserRegistrationForm
 from django.contrib.auth.models import User
 from Calendar.models import Customer, Profile
+from django.views.generic import  CreateView
 
 def login(request):
     """Функция для авторизации пользователя"""
@@ -31,31 +32,58 @@ def login(request):
     }
     return render(request,'main/login.html', context)
 
-def register(request):
-    """Функция для регистрации пользователя"""
-    if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('login'))
-    if request.method == 'POST':
-        form = UserRegistrationForm(data=request.POST)
-        if User.objects.filter(username = request.POST['username']).first():
-                messages.warning(request, "Такой пользователь уже существует")
-                return redirect('register')
-        elif User.objects.filter(email = request.POST['email']).first():
-                messages.warning(request, "Пользователь с такой почтой уже существует")
-                return redirect('register')
-        if form.is_valid():
-                form.save()
-                user = User.objects.get(username = request.POST['username'])
-                Profile.objects.create(user = user, telegram_id=request.POST['telegram_id'])
-                messages.success(request, 'Вы успешно зарегистрировались')
-                return HttpResponseRedirect(reverse('login'))
-    else:
-        form = UserRegistrationForm()
-    context = {
-        'form': form,
-        'title': 'Создание профиля',
-    }
-    return render(request, 'main/register.html', context)
+# def register(request):
+#     """Функция для регистрации пользователя"""
+#     if request.user.is_authenticated:
+#         return HttpResponseRedirect(reverse('login'))
+#     if request.method == 'POST':
+#         form = UserRegistrationForm(data=request.POST)
+#         if User.objects.filter(username = request.POST['username']).first():
+#                 messages.warning(request, "Такой пользователь уже существует")
+#                 return redirect('register')
+#         elif User.objects.filter(email = request.POST['email']).first():
+#                 messages.warning(request, "Пользователь с такой почтой уже существует")
+#                 return redirect('register')
+#         elif request.POST['password1'] != request.POST['password2']:
+#                 messages.warning(request, "Пароли не совпадают")
+#                 return redirect('register')
+#         try:
+#             int(request.POST['telegram_id'])
+#         except:
+#             messages.warning(request, "ID телеграмма должен быть представлен в виде числа")
+#             return redirect('register')
+#         if form.errors and 'captcha' in form.errors:
+#             messages.warning(request, "Капча не верна")
+#             return redirect('register')
+#         if form.is_valid():
+#                 form.save()
+#                 user = User.objects.get(username = request.POST['username'])
+#                 Profile.objects.create(user = user, telegram_id=request.POST['telegram_id'])
+#                 messages.success(request, 'Вы успешно зарегистрировались')
+#                 return HttpResponseRedirect(reverse('login'))
+#     else:
+#         form = UserRegistrationForm()
+#     context = {
+#         'form': form,
+#         'title': 'Создание профиля',
+#     }
+#     return render(request, 'main/register.html', context)
+
+class RegisterUser(CreateView):
+    form_class = UserRegistrationForm
+    template_name = 'main/register.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return dict(list(context.items()))
+
+    def form_valid(self, form):
+        user = form.save()
+        Profile.objects.create(user = user, telegram_id=self.request.POST['telegram_id'])
+        messages.success(self.request, 'Вы успешно зарегистрировались')
+        return redirect('login')
+
 
 class MyAccount(View):
     
